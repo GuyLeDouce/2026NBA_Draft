@@ -1,0 +1,48 @@
+export const WEIGHTS = {
+  base: 1,
+  vor: 0.12,
+  vorCap: 4,
+  needEarly: 2,
+  needLate: 7,
+  flex: 0.8,
+  scarcity: 3,
+  tierDrop: 3,
+  demand: 0.6,
+  run: 1.5,
+  upside: 0.12,
+  highRisk: 1.5,
+  mediumRisk: 0.5,
+  cumulativeRisk: 3,
+  priority: 1.5,
+  avoid: 30,
+  deepPenalty: 35,
+  contextCapEarly: 8,
+  contextCapLate: 20,
+};
+export const THRESHOLDS = {
+  earlyRounds: 3,
+  relevantRank: 300,
+  scarcityHorizon: 45,
+  runWindow: 8,
+  runCount: 4,
+  thinDepth: 3,
+  demandHigh: 3,
+  demandVeryHigh: 5,
+  tierGap: 4,
+  meaningfulValue: 7,
+  stealValue: 15,
+  twoPickDistance: 20,
+  highRiskExposure: 2,
+};
+export const TIER_BOUNDS = [12, 30, 60, 100, 150, 220, 300, 429, 600];
+
+export const PLANNER_WEIGHTS = {
+  need: 4,
+  run: 5,
+  tier: 1.5,
+  scarcity: 2,
+  variation: 2,
+  paths: 3,
+  candidates: 5,
+  horizon: 20,
+};
