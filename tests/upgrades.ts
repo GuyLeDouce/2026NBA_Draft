@@ -565,3 +565,49 @@ test("Importer blocks ambiguous identity refresh in an isolated fixture workspac
     baseline,
   );
 });
+
+test("Lockfile has concrete versions for all packages, including optional platforms", () => {
+  const lock = JSON.parse(
+    fs.readFileSync(path.join(process.cwd(), "package-lock.json"), "utf8"),
+  ) as {
+    packages: Record<
+      string,
+      {
+        version?: string;
+        link?: boolean;
+        optionalDependencies?: Record<string, string>;
+      }
+    >;
+  };
+  for (const [location, entry] of Object.entries(lock.packages)) {
+    if (location && !entry.link)
+      assert.match(
+        entry.version ?? "",
+        /^\d+\.\d+\.\d+(?:[-+].*)?$/,
+        `Missing or invalid version: ${location}`,
+      );
+    for (const dependency of Object.keys(entry.optionalDependencies ?? {})) {
+      let parent = location;
+      let resolved = false;
+      while (true) {
+        if (
+          lock.packages[
+            `${parent ? parent + "/" : ""}node_modules/${dependency}`
+          ]?.version
+        ) {
+          resolved = true;
+          break;
+        }
+        if (!parent) break;
+        parent = parent.slice(
+          0,
+          Math.max(0, parent.lastIndexOf("/node_modules/")),
+        );
+      }
+      assert.ok(
+        resolved,
+        `Missing optional dependency: ${location} -> ${dependency}`,
+      );
+    }
+  }
+});

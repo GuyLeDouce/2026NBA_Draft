@@ -48,3 +48,11 @@ Canonical XLSX SHA-256 remains unchanged. Generated player data, identity normal
 Release source is published to `GuyLeDouce/2026NBA_Draft` through the authorized GitHub connection. The new repository starts with this validated release; the audited local baseline is `17fb0572821149caaf9f5b4776965275565e018b`.
 
 The local checkout remains on that baseline with the upgrade in its working tree because this session grants read-only access to `.git`. Direct Git network access is also restricted. Remote publication does not alter the local index, branch, or history. The canonical workbook is uploaded byte-for-byte, and remote Git blob hashes are checked against the local release files.
+
+## npm installation repair
+
+The first release lockfile contained 72 incomplete optional-platform entries without versions. An online `npm install` with npm 11.20.0 reached these entries and failed in Arborist deduplication with `Invalid Version:`. The earlier Windows build and offline installation did not expose this defect.
+
+Regenerated the lockfile from complete cached registry manifests using npm 11.20.0. Every previously resolved dependency keeps its version; optional platform packages and their transitive dependencies now have complete records. Added a regression test requiring concrete package versions and resolved optional dependency references.
+
+Verified on Node 24.14.0 / npm 11.20.0: existing-tree `npm install` and isolated clean `npm ci` both pass using the local package cache (`--offline --no-audit --no-fund`). Repeating installation leaves the lockfile unchanged. All 92 domain tests, player validation, lint, typecheck and the production build pass. The 26 browser acceptance tests from the upgrade remain the prior browser result; application source was not changed by this repair. Canonical workbook and player data remain unchanged.
